@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import tn.esprit.entities.DataPoint;
 import tn.esprit.entities.User;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
@@ -33,8 +34,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 			+ "WHEN true THEN 'blocked users' "
 			+ "WHEN false THEN 'unblocked users' "
 			+ "ELSE e.blocked "
-			+ "END "
-			+", count(1)"
+			+ "END " 
+			+", count(1) as y "
 			+ "FROM User e group by e.blocked")
 	public List getLockUnlockUser();
 
