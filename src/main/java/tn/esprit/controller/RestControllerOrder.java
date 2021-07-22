@@ -61,8 +61,8 @@ public class RestControllerOrder {
 	@PostMapping("/addOrder")
 	@ResponseBody
 	public Order addOrder(@RequestBody Order order) {
-		User u = userService.findUser(order.getIdUser());
-		order.setUser(u);
+		//User u = userService.findUser(order.getIdUser());
+		//order.setUser(u);
 		this.orderService.addOrder(order);
 		return order ;
 	}
@@ -126,12 +126,25 @@ public class RestControllerOrder {
 		return this.orderService.findNumberOrderForUser();
 	}
 	
+	public List<OrderDetails> getOrderDetails(List<OrderDetails> ordDetails){
+		List<OrderDetails> ordDetailsReturn = new ArrayList<>();
+		for(OrderDetails order:ordDetails) {
+			Product product = this.productServices.findProduct(order.getIdProduct());
+			Order order2 = this.orderService.findOrder(order.getIdOrder());
+			order.setProduct(product);
+			order.setOrder(order2);
+			ordDetailsReturn.add(order);
+		}
+		return ordDetailsReturn ;
+	}
+	
 	@RequestMapping("/downloadOrderFile") 
-	public String method(HttpServletResponse response){
+	public String method(HttpServletResponse response,@RequestBody List<OrderDetails> orderDetails){
         try {
         
-        this.pdfGenerator.generatePdfReport();
-        String fileName = this.pdfGenerator.getPdfNameWithDate();
+        orderDetails = this.getOrderDetails(orderDetails);
+        this.pdfGenerator.generatePdfReport(orderDetails);
+        String fileName = this.pdfGenerator.getPdfNameWithDate(orderDetails.get(0).getOrder().getReference());
 		byte [] data = Files.readAllBytes(Paths.get(fileName));
         response.setContentType("application/" + "pdf");
         response.addHeader("content-disposition", "attachment; filename=" + fileName);
