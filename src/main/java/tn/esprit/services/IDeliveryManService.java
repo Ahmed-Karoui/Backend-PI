@@ -28,7 +28,11 @@ public interface IDeliveryManService {
 	//affectatiopn tache avancée
 	
 	public String affectOrdersToDeliveryMan(AffectationDto aff);
-	public String setOrderDelivered_Criteria(int idDeliveryMan,int idOrder); // il reste a ajouter la  notification par email  !
+	public Order setOrderDelivered_Criteria(int idDeliveryMan,int idOrder); // il reste a ajouter la  notification par email  !
+	
+	public Order supprimerAffectation(int idOrder);
+	
+	public String affectOrdersToDeliveryManFront(int idD,int idC);
 	
 	
 	
@@ -46,7 +50,7 @@ public interface IDeliveryManService {
 	
 	
 	//algo optimisation
-	public PropositionDto optimisationAlgo(@PathVariable int codePostalOrder);
+	public List<DeliveryMan> optimisationAlgo(@PathVariable int codePostalOrder);
 
 	
 	//cron 
