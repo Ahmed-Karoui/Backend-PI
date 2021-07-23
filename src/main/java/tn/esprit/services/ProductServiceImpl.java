@@ -32,8 +32,11 @@ public class ProductServiceImpl implements IProductService {
 	public int updateProduct(Product product) {
 		Product oldProduct = productRepository.findById(product.getId()).orElse(null);
 		oldProduct.setTitle(product.getTitle());
-		oldProduct.setCategory(product.getCategory());
-		oldProduct.setPublicationDate(product.getPublicationDate());
+		//oldProduct.setCategory(product.getCategory());
+		oldProduct.setPrice(product.getPrice());
+		oldProduct.setDescription(product.getDescription());
+		oldProduct.setImage(product.getImage());
+		oldProduct.setPublicationDate(new Date());
 		productRepository.save(oldProduct);
 		
 		return product.getId();
