@@ -15,5 +15,7 @@ public interface IFeedBackService {
 	public Feedback findFeedback(int idFeedback);
 	
 	public List<Feedback> findAllFeedBack();
+	
+	public Feedback findListFeedBackByIdProduct(int idProduct);
 
 }

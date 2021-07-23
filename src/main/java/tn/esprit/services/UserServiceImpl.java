@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import tn.esprit.entities.DataPoint;
 import tn.esprit.entities.User;
 import tn.esprit.entities.UserRole;
 import tn.esprit.repository.UserRepository;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements IUserService {
 		Random random = new Random();
 		user.setConfirmCode(String.valueOf(random.nextInt(10000000)));
 		user.setConfirmed(false);
-		if(user.getUserRole()==null)
+		if (user.getUserRole() == null)
 			user.setUserRole(UserRole.USER);
 		userRepository.save(user);
 		return user.getId();
@@ -80,7 +81,7 @@ public class UserServiceImpl implements IUserService {
 		oldUser.setLastName(user.getLastName());
 		oldUser.setEmail(user.getEmail());
 		oldUser.setUsername(user.getUsername());
-		//oldUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		// oldUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		oldUser.setUserRole(user.getUserRole());
 		userRepository.save(oldUser);
 		return 0;
@@ -91,7 +92,7 @@ public class UserServiceImpl implements IUserService {
 		// TODO Auto-generated method stub
 		return userRepository.findById(idUser).orElse(null);
 	}
-	
+
 	@Override
 	public List<User> findAllUser() {
 		// TODO Auto-generated method stub
@@ -165,8 +166,16 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List statLockUnlockUser() {
-		return userRepository.getLockUnlockUser();
+	public List<DataPoint> statLockUnlockUser() {
+		List<DataPoint> list = new ArrayList<DataPoint>() ;
+		for (Object object : userRepository.getLockUnlockUser()) {
+			DataPoint dataPoint = new DataPoint();     
+			dataPoint.setLabel((((Object[]) object)[0]).toString());
+			dataPoint.setY(Float.valueOf((((Object[]) object)[1]).toString()));
+			list.add(dataPoint);
+		}
+
+		return list;
 	}
 
 	@Override
