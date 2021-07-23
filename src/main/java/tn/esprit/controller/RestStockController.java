@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tn.esprit.entities.OrderDetails;
 import tn.esprit.entities.Product;
 import tn.esprit.entities.Stock;
+import tn.esprit.entities.StockPosition;
 import tn.esprit.entities.User;
 import tn.esprit.repository.UserRepository;
 import tn.esprit.services.EmailServiceImpl;
@@ -91,8 +92,25 @@ public class RestStockController {
 		return StockServices.findAllStock();
 	}
 	
+	@GetMapping(value = "/getAvailableProductsToStock")
+	public List<Product> getAvailableProductsToStock() {
+		return StockServices.getAvailableProductsToStock();
+	}
 	
-	@Scheduled(fixedDelay = 100000)
+	@GetMapping(value = "/productsOrderByQte")
+	public List productsOrderByQte() {
+		return StockServices.productsOrderByQte();
+	}
+	
+	@GetMapping(value = "/getProductByRow/{row}")
+	public List getProductByRow(@PathVariable("row") String row) {
+		 
+		return StockServices.getStockByRow(StockPosition.valueOf(row));
+	}
+	
+	
+	//@Scheduled(fixedDelay = 10000000)
+	@Scheduled(cron = "0 0 23 * * *")
 	public void sendOutOfStockAlert() {
 		System.out.println("I am here");
 		String text = "Les produit qui ont atteint le seuille de stock = 10 sont : \n";
@@ -106,7 +124,7 @@ public class RestStockController {
 			Product produit = st.getProduct();
 		
 			//String qte = qte + String.valueOf(st.getQte()) ;
-			text = text + "\n Titre produit : "+ produit.getTitle()+" Quantité restante :"+st.getQte()+"\n";
+			text = text + "\n Titre produit : "+ produit.getTitle()+" Quantité restante :"+st.getQte()+" à la position :"+st.getStockPosition()+"\n";
 					;
 		}
 		emailService.sendSimpleMessage(admin.getEmail(), "Alerte Stock", text);

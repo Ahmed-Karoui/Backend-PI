@@ -64,5 +64,24 @@ public class RestProductController {
 	public List<Product> findAllProduct() {
 		return productServices.findAllProduct();
 	}
+	
+	@GetMapping(value = "/nombreProductByCategory")
+	@ResponseBody
+	public List nombreProductByCategory() {
+		return productServices.getNombreProductByCategory();
+	}
+	
+	@GetMapping(value = "/getProductByTitle/{title}")
+	@ResponseBody
+	public List<Product> getProductByTitle(@PathVariable("title") String title) {
+		return productServices.getProductByTitle(title);
+	}
+	
+	@GetMapping(value = "/getProductsByCategory/{id}")
+	@ResponseBody
+	public List<Product> getProductsByCategory(@PathVariable("id") int id) {
+		return productServices.getProductsByCategory(id);
+	}
+	
 
 }

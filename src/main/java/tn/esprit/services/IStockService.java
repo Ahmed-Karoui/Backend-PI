@@ -3,7 +3,9 @@ package tn.esprit.services;
 import java.util.List;
 
 import tn.esprit.entities.OrderDetails;
+import tn.esprit.entities.Product;
 import tn.esprit.entities.Stock;
+import tn.esprit.entities.StockPosition;
 
 public interface IStockService {
 	
@@ -22,5 +24,11 @@ public interface IStockService {
 	public List<Stock> checkAlertStock();
 	
 	public Stock getStockByProduct(int idProduct); 
+	
+	public List productsOrderByQte();
+	
+	public List getStockByRow(StockPosition row);
+	
+	public List<Product> getAvailableProductsToStock();
 
 }

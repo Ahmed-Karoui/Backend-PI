@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.entities.OrderDetails;
 import tn.esprit.entities.Product;
 import tn.esprit.entities.Stock;
+import tn.esprit.entities.StockPosition;
 import tn.esprit.repository.OrderDetailsRepository;
 import tn.esprit.repository.ProductRepository;
 import tn.esprit.repository.StockRepository;
@@ -106,6 +107,22 @@ public class StockServiceImpl implements IStockService {
 		Stock stock = stockRepository.getStockByProduct(idProduct);
 		return stock;
 	}
+
+	@Override
+	public List productsOrderByQte() {
+		return stockRepository.getProductOrderByStock();
+	}
+
+	@Override
+	public List getStockByRow(StockPosition row) {
+		return stockRepository.getStockByRow(row);
+	}
+
+	@Override
+	public List<Product> getAvailableProductsToStock() {
+		return stockRepository.getAvailableProductsToStock();
+	}
+
 	
 	
 	

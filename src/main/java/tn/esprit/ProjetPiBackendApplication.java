@@ -12,7 +12,7 @@ import tn.esprit.util.pdf.PDFGenerator;
 
 @SpringBootApplication
 @Configuration
-//@EnableScheduling
+@EnableScheduling
 public class ProjetPiBackendApplication implements CommandLineRunner {
 	
 	@Autowired
