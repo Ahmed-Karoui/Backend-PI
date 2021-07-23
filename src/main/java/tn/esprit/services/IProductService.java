@@ -16,5 +16,13 @@ public interface IProductService {
 	public Product findProduct(int idProduct);
 	
 	public List<Product> findAllProduct();
+	
+	public List getNombreProductByCategory(); 
+	
+	public List<Product> getProductByTitle(String title);
+	
+	public List<Product> getProductsByCategory(int id );
+	
+	
 
 }

@@ -3,6 +3,8 @@ package tn.esprit.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +19,8 @@ public class Stock implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int qte;
+	@Enumerated(EnumType.STRING)
+	private StockPosition stockPosition;
 	@OneToOne
 	private Product product;
 
@@ -54,5 +58,14 @@ public class Stock implements Serializable {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
+
+	public StockPosition getStockPosition() {
+		return stockPosition;
+	}
+
+	public void setStockPosition(StockPosition stockPosition) {
+		this.stockPosition = stockPosition;
+	}
+	
 
 }

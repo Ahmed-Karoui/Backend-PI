@@ -1,5 +1,6 @@
 package tn.esprit.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public int addProduct(Product product) {
+		product.setPublicationDate(new Date());
 		productRepository.save(product);
 		return product.getId();
 	}
@@ -47,6 +49,24 @@ public class ProductServiceImpl implements IProductService {
 	public List<Product> findAllProduct() {
 		// TODO Auto-generated method stub
 		return (List<Product>) productRepository.findAll()  ;
+	}
+
+	@Override
+	public List getNombreProductByCategory() {
+		
+		return productRepository.numberProductsByCategory();
+	}
+
+	@Override
+	public List<Product> getProductByTitle(String title) {
+		return productRepository.getProductByTitle(title);
+	}
+
+	@Override
+	public List<Product> getProductsByCategory(int id) {
+		
+		return productRepository.getProductsByCategory(id);
+		
 	}
 
 }
