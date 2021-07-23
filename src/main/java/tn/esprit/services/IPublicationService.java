@@ -27,6 +27,13 @@ public interface IPublicationService {
 	public List<Publication> findPublicationByUser(int idUser);
 	
 	public int getNombrePublicationJPQL();
-
+	
+	public List<Publication> getValidatedPublications();
+	
+	public List<Publication> getNotValidatedPublications();
+	
+	public List getnbValidated();
+	
+	public List statPublications();
 	
 }
