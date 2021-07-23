@@ -1,6 +1,7 @@
 package tn.esprit.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ public class Reclamation implements Serializable {
 	private String subject;
 	private String message;
 	private String status;
+	private Date publicationDate;
 	@ManyToOne
 	private User user;
 
@@ -29,6 +31,7 @@ public class Reclamation implements Serializable {
 		this.message = message;
 		this.status = status;
 		this.user = user;
+		this.publicationDate = new Date();
 	}
 
 	public Reclamation() {
@@ -73,6 +76,13 @@ public class Reclamation implements Serializable {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public Date getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(Date publicationDate) {
+		this.publicationDate = publicationDate;
 	}
 
 }

@@ -17,6 +17,9 @@ public class OrderDetails implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int qte;
+	private transient int idProduct;
+	private transient int idOrder;
+	
 	@ManyToOne
 	private Product product;
 	@ManyToOne
@@ -64,6 +67,22 @@ public class OrderDetails implements Serializable {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public int getIdProduct() {
+		return idProduct;
+	}
+
+	public void setIdProduct(int idProduct) {
+		this.idProduct = idProduct;
+	}
+
+	public int getIdOrder() {
+		return idOrder;
+	}
+
+	public void setIdOrder(int idOrder) {
+		this.idOrder = idOrder;
 	}
 
 }

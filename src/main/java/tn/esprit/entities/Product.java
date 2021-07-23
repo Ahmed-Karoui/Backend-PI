@@ -24,6 +24,7 @@ public class Product implements Serializable {
 	@Lob
 	private String description;
 	private Date publicationDate;
+	private float price;
 
 	@ManyToOne
 	private Category category;
@@ -78,6 +79,7 @@ public class Product implements Serializable {
 		this.publicationDate = publicationDate;
 	}
 
+
 	public Float getPrice() {
 		return price;
 	}
@@ -103,6 +105,5 @@ public class Product implements Serializable {
 	}
 	
 	
-
 
 }

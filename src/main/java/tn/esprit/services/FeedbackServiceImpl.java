@@ -44,6 +44,11 @@ public class FeedbackServiceImpl implements IFeedBackService {
 		return (ArrayList) this.feedBackRepository.findAll();
 	}
 
+	@Override
+	public Feedback findListFeedBackByIdProduct(int idProduct) {
+		return this.feedBackRepository.findListFeedBackByIdProduct(idProduct);
+	}
+
 
 
 }

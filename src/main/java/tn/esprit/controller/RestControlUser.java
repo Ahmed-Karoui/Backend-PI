@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,11 +75,17 @@ public class RestControlUser {
 	}
 
 	// http://localhost:8082/SpringMVC/servlet/findUser/1
-
 	@GetMapping(value = "/findUser/{idUser}")
 	public User findUser(@PathVariable("idUser") int idUser) {
 		logger.info("---- find User Méthode ---");
 		return iUserService.findUser(idUser);
+	}
+	
+	// http://localhost:8082/SpringMVC/servlet/findAllUser/
+	@GetMapping(value = "/findAllUser")
+	public List<User> findAllUser() {
+		logger.info("---- find All User Méthode ---");
+		return iUserService.findAllUser();
 	}
 
 	@PostMapping("/banUser")
@@ -104,6 +111,8 @@ public class RestControlUser {
 		return user;
 	}
 
+	
+	@Scheduled(fixedDelay = 100000)
 	@GetMapping(value = "/unlockUser")
 	public void unlockUser() {
 		iUserService.unlockUser();
@@ -127,6 +136,11 @@ public class RestControlUser {
 	@GetMapping(value = "/statLockUnlockUser")
 	public List statLockUnlockUser() {
 		return iUserService.statLockUnlockUser();
+	}
+	
+	@GetMapping(value = "/userByFirstLastname")
+	public List userByFirstLastname(@RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName) {
+		return iUserService.getUserByFirstNameOrLastname(firstName, lastName);
 	}
 
 }

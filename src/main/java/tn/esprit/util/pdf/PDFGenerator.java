@@ -3,6 +3,7 @@ package tn.esprit.util.pdf;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.itextpdf.text.Annotation;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -24,9 +26,11 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageLabels;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import tn.esprit.entities.Order;
+import tn.esprit.entities.OrderDetails;
 import tn.esprit.services.OrderServiceImpl;
 
 @Service
@@ -62,24 +66,24 @@ public class PDFGenerator {
 	@Autowired
 	OrderServiceImpl orderServiceImpl;
 
-	private static Font COURIER = new Font(Font.FontFamily.COURIER, 20, Font.BOLD);
+	private static Font COURIER = new Font(Font.FontFamily.COURIER, 15, Font.BOLD);
 	private static Font COURIER_SMALL = new Font(Font.FontFamily.COURIER, 16, Font.BOLD);
 	private static Font COURIER_SMALL_FOOTER = new Font(Font.FontFamily.COURIER, 12, Font.BOLD);
-
-	public byte[] generatePdfReport() {
+	
+	public byte[] generatePdfReport(List<OrderDetails> orderDetails) {
 
 		Document document = new Document();
 
 		try {
-			FileOutputStream fileOutputStream = new FileOutputStream(getPdfNameWithDate());
+			FileOutputStream fileOutputStream = new FileOutputStream(getPdfNameWithDate(orderDetails.get(0).getOrder().getReference()));
 			
 			PdfWriter.getInstance(document, fileOutputStream);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			document.open();
 			addLogo(document);
-			addDocTitle(document);
-			createTable(document,noOfColumns);
-			addFooter(document);
+			addDocTitle(document,orderDetails.get(0).getOrder());
+			createTable(document,noOfColumns,orderDetails);
+			//addFooter(document);
 			document.close();
 			PdfWriter.getInstance(document, stream);
 			BufferedOutputStream bo = new BufferedOutputStream(fileOutputStream);
@@ -107,20 +111,31 @@ public class PDFGenerator {
 		}
 	}
 
-	private void addDocTitle(Document document) throws DocumentException {
+	private void addDocTitle(Document document, Order order) throws DocumentException {
 		String localDateString = LocalDateTime.now().format(DateTimeFormatter.ofPattern(localDateFormat));
 		Paragraph p1 = new Paragraph();
 		leaveEmptyLine(p1, 1);
-		p1.add(new Paragraph(reportFileName, COURIER));
-		p1.setAlignment(Element.ALIGN_CENTER);
+		p1.add(new Paragraph(reportFileName + order.getReference(), COURIER));
+		p1.setAlignment(Element.ALIGN_RIGHT);
 		leaveEmptyLine(p1, 1);
-		p1.add(new Paragraph("Report generated on " + localDateString, COURIER_SMALL));
+		
+		Paragraph staut = new Paragraph();
+		leaveEmptyLine(staut, 1);
+		staut.add(new Paragraph("Statut de la commande : " + order.getStatus()));
+		staut.add(new Paragraph("Type de paiement : " + order.getTypePaiement()));
+		staut.add(new Paragraph("Code postal : " + order.getCodePostal()));
+		staut.add(new Paragraph("Adresse : " + order.getAdresse()));
+		staut.setAlignment(Element.ALIGN_RIGHT);
+		leaveEmptyLine(staut, 1);
+		
+		//p1.add(new Paragraph("Report generated on " + localDateString, COURIER_SMALL));
 
 		document.add(p1);
+		document.add(staut);
 
 	}
 
-	private void createTable(Document document, int noOfColumns) throws DocumentException {
+	private void createTable(Document document, int noOfColumns,List<OrderDetails> orderDetails) throws DocumentException {
 		Paragraph paragraph = new Paragraph();
 		leaveEmptyLine(paragraph, 3);
 		document.add(paragraph);
@@ -135,25 +150,25 @@ public class PDFGenerator {
 		}
 
 		table.setHeaderRows(1);
-		getDbData(table);
+		getDbData(table,orderDetails);
 		document.add(table);
 	}
 	
-	private void getDbData(PdfPTable table) {
+	private void getDbData(PdfPTable table,List<OrderDetails> orderDetails) {
 		
 		List<Order> list = this.orderServiceImpl.findAllOrder();
-		for (Order order : list) {
+		for (OrderDetails orderDetail : orderDetails) {
 			
 			table.setWidthPercentage(100);
 			table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
 			
-			table.addCell(order.getReference());
-			table.addCell(order.getAdresse());
-			table.addCell(order.getTypePaiement());
-			table.addCell(currencySymbol + order.getStatus());
+			table.addCell(orderDetail.getProduct().getTitle());	
+			table.addCell(String.valueOf(orderDetail.getQte()));
+			table.addCell(orderDetail.getProduct().getCategory().getName());
+			//table.addCell(currencySymbol + order.getStatus());
 			
-			System.out.println(order.getReference());
+			System.out.println(orderDetail.getProduct().getTitle());
 		}
 		
 	}
@@ -175,9 +190,13 @@ public class PDFGenerator {
 		}
 	}
 	
-	public String getPdfNameWithDate() {
+	public String getPdfNameWithDate(String title) {
 		String localDateString = LocalDateTime.now().format(DateTimeFormatter.ofPattern(reportFileNameDateFormat));
-		return "Order-Report"+"-"+localDateString+".pdf";
+		File theDir = new File("D:/PdfReportRepo/");
+		if (!theDir.exists()){
+		    theDir.mkdirs();
+		}
+		return "D:/PdfReportRepo/Order-Report-"+ title +"-"+localDateString+".pdf";
 	}
 
 }

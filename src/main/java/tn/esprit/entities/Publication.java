@@ -5,11 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;  
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Publication implements Serializable {
@@ -19,27 +25,34 @@ public class Publication implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	private String title;
 	private String content;
 	private Date publicationDate;
 	private int nbLike;
 	private int nbDisLike;
+	private String Image;
 	private boolean validated;
+	@JsonIgnore
 	@OneToMany(mappedBy = "publication")
 	private List<Comment> comments;
 	@ManyToOne
 	private User user;
+	private transient int IdUser;
 
+	
 	public Publication(int id, String content, Date publicationDate, int nbLike, int nbDisLike, List<Comment> comments,
-			User user, boolean validated) {
-		super();
+			User user, boolean validated , String Image , String title) {
+		super(); 
 		this.id = id;
 		this.content = content;
-		this.publicationDate = publicationDate;
+		this.publicationDate = new Date();
 		this.nbLike = nbLike;
 		this.nbDisLike = nbDisLike;
 		this.comments = comments;
 		this.user = user;
 		this.validated = false;
+		this.Image = Image;
+		this.title = title;
 	}
 
 	public Publication() {
@@ -109,6 +122,36 @@ public class Publication implements Serializable {
 	public void setValidated(boolean validated) {
 		this.validated = validated;
 	}
+
+	public String getImage() {
+		return Image;
+	}
+
+	public void setImage(String image) {
+		Image = image;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getIdUser() {
+		return IdUser;
+	}
+
+	public void setIdUser(int idUser) {
+		IdUser = idUser;
+	}
+	
+	
+	
+
+	
+	
 	
 	
 

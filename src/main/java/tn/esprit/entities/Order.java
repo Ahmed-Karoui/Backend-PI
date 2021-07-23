@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,12 +30,16 @@ public class Order implements Serializable {
 	private String typePaiement;
 	private String adresse;
 	private String codePostal;
-
-	@ManyToOne
+	private transient int idUser ;
+    
+	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private DeliveryMan deliveryMan;
 	
-	@JsonIgnore
-	@ManyToOne
+
+	//@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	//@NotFound(action = NotFoundAction.IGNORE)
 	private User user;
 
 	public Order(int id, String reference, Date orderDate, String status, String typePaiement, String adresse,
@@ -123,6 +130,14 @@ public class Order implements Serializable {
 
 	public void setCodePostal(String codePostal) {
 		this.codePostal = codePostal;
+	}
+
+	public int getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
 	}
 
 }
