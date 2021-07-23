@@ -2,8 +2,8 @@ package tn.esprit.dto;
 
 public class CountOrderByUser {
 	
-	private String firstNameUser ;
-	private Long orderNumber ;
+	private String firstNameUser;
+	private Long orderNumber;
 	
 	public CountOrderByUser(String firstNameUser, Long orderNumber) {
 		super();
