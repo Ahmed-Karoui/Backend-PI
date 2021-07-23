@@ -134,12 +134,14 @@ public class UserServiceImpl implements IUserService {
 		List<User> users = userRepository.getLockedUsers(true);
 		long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
 		for (User user : users) {
-			boolean moreThanDay = Math.abs(new Date().getTime() - user.getBlockedDate().getTime()) > MILLIS_PER_DAY;
-			if (moreThanDay) {
-				user.setBlockedDate(null);
-				user.setBlocked(false);
-				user.setWrongPassword(0);
-				userRepository.save(user);
+			if (user.getBlockedDate() != null) {
+				boolean moreThanDay = Math.abs(new Date().getTime() - user.getBlockedDate().getTime()) > MILLIS_PER_DAY;
+				if (moreThanDay) {
+					user.setBlockedDate(null);
+					user.setBlocked(false);
+					user.setWrongPassword(0);
+					userRepository.save(user);
+				}
 			}
 		}
 	}
@@ -167,9 +169,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public List<DataPoint> statLockUnlockUser() {
-		List<DataPoint> list = new ArrayList<DataPoint>() ;
+		List<DataPoint> list = new ArrayList<DataPoint>();
 		for (Object object : userRepository.getLockUnlockUser()) {
-			DataPoint dataPoint = new DataPoint();     
+			DataPoint dataPoint = new DataPoint();
 			dataPoint.setLabel((((Object[]) object)[0]).toString());
 			dataPoint.setY(Float.valueOf((((Object[]) object)[1]).toString()));
 			list.add(dataPoint);
