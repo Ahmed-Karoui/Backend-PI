@@ -1,5 +1,6 @@
 package tn.esprit.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -7,8 +8,11 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import tn.esprit.entities.DataPoint;
 import tn.esprit.entities.User;
+import tn.esprit.entities.UserRole;
 import tn.esprit.repository.UserRepository;
 
 @Service
@@ -23,6 +27,8 @@ public class UserServiceImpl implements IUserService {
 		Random random = new Random();
 		user.setConfirmCode(String.valueOf(random.nextInt(10000000)));
 		user.setConfirmed(false);
+		if (user.getUserRole() == null)
+			user.setUserRole(UserRole.USER);
 		userRepository.save(user);
 		return user.getId();
 	}
@@ -75,7 +81,7 @@ public class UserServiceImpl implements IUserService {
 		oldUser.setLastName(user.getLastName());
 		oldUser.setEmail(user.getEmail());
 		oldUser.setUsername(user.getUsername());
-		oldUser.setPassword(user.getPassword());
+		// oldUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		oldUser.setUserRole(user.getUserRole());
 		userRepository.save(oldUser);
 		return 0;
@@ -85,6 +91,12 @@ public class UserServiceImpl implements IUserService {
 	public User findUser(int idUser) {
 		// TODO Auto-generated method stub
 		return userRepository.findById(idUser).orElse(null);
+	}
+
+	@Override
+	public List<User> findAllUser() {
+		// TODO Auto-generated method stub
+		return (List<User>) userRepository.findAll();
 	}
 
 	@Override
@@ -120,8 +132,10 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public void unlockUser() {
 		List<User> users = userRepository.getLockedUsers(true);
+		long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
 		for (User user : users) {
-			if (new Date().compareTo(user.getBlockedDate()) > 0) {
+			boolean moreThanDay = Math.abs(new Date().getTime() - user.getBlockedDate().getTime()) > MILLIS_PER_DAY;
+			if (moreThanDay) {
 				user.setBlockedDate(null);
 				user.setBlocked(false);
 				user.setWrongPassword(0);
@@ -152,8 +166,21 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List statLockUnlockUser() {
-		return userRepository.getLockUnlockUser();
+	public List<DataPoint> statLockUnlockUser() {
+		List<DataPoint> list = new ArrayList<DataPoint>() ;
+		for (Object object : userRepository.getLockUnlockUser()) {
+			DataPoint dataPoint = new DataPoint();     
+			dataPoint.setLabel((((Object[]) object)[0]).toString());
+			dataPoint.setY(Float.valueOf((((Object[]) object)[1]).toString()));
+			list.add(dataPoint);
+		}
+
+		return list;
+	}
+
+	@Override
+	public List<User> getUserByFirstNameOrLastname(String firstName, String lastName) {
+		return userRepository.getUserByFirstNameOrLastname(firstName, lastName);
 	}
 
 }

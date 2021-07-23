@@ -2,7 +2,6 @@ package tn.esprit.services;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
 
 import tn.esprit.entities.Reclamation;
 
@@ -17,5 +16,11 @@ public interface IReclamationService {
 	public Reclamation findReclamation(int idReclamation);
 	
 	public List<Reclamation> findAllReclamation();
+	
+	public int getNumberReclamation() ;
+	
+	public List<Object> getStatusReclamtionByDate();
+	
+	
 
 }

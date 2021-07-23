@@ -18,6 +18,10 @@ public class ProjetPiBackendApplication implements CommandLineRunner {
 	@Autowired
 	public PDFGenerator pfdGenerator ;
 	
+	@Autowired
+	private OrderRepository orderRepo ;
+
+
 
 	public static void main(String[] args) {
 
@@ -28,8 +32,6 @@ public class ProjetPiBackendApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("Debut PDF_GENERATE");
-		//pfdGenerator.generatePdfReport();
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tn.esprit.dto.CountOrderByUser;
 import tn.esprit.entities.Order;
 import tn.esprit.repository.OrderRepository;
 
@@ -66,6 +67,11 @@ public class OrderServiceImpl implements IOrderService {
 //		 try {
 //			 if(
 		return this.orderRepository.findOrderByUserId(idUser);
+	}
+
+	@Override
+	public List<CountOrderByUser> findNumberOrderForUser() {
+		return this.orderRepository.findOrderNumberForUser();
 	}
 
 }

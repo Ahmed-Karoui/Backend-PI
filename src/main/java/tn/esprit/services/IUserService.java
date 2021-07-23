@@ -12,6 +12,8 @@ public interface IUserService {
 
 	public int updateUser(User user);
 
+	public List<User> findAllUser();
+
 	public User findUser(int idUser);
 
 	public User autentificateUser(String username, String password);
@@ -34,6 +36,7 @@ public interface IUserService {
 	public List statLockUnlockUser();
 
 	
+	public List getUserByFirstNameOrLastname(String firstName, String lastName) ;
 
 	
 	

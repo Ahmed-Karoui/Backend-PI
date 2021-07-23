@@ -2,6 +2,7 @@ package tn.esprit.services;
 
 import java.util.List;
 
+import tn.esprit.dto.CountOrderByUser;
 import tn.esprit.entities.Order;
 
 public interface IOrderService {
@@ -17,5 +18,7 @@ public interface IOrderService {
 	public List<Order> findAllOrder();
 
 	public List<Order> findOrderByUserCriteria(Integer idUser);
+	
+	public List<CountOrderByUser> findNumberOrderForUser();
 
 }

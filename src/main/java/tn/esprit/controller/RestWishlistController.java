@@ -59,4 +59,10 @@ public class RestWishlistController {
 	public List<Whishlist> findAllWishList() {
 		return wishListServices.findAllWishList();
 	}
+	
+	@GetMapping(value = "/getNumberWishList")
+	@ResponseBody
+	public int getNumberWishList() {
+		return wishListServices.getNumberWishList();
+	}
 }

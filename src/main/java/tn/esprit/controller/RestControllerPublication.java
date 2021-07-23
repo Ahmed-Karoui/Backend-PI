@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.entities.Order;
 import tn.esprit.entities.Publication;
+import tn.esprit.entities.User;
 import tn.esprit.services.IPublicationService;
+import tn.esprit.services.IUserService;
 
 @RestController
 public class RestControllerPublication {
@@ -23,11 +25,15 @@ public class RestControllerPublication {
 	
 	@Autowired
 	IPublicationService iPublicationService;
+	@Autowired
+	IUserService IUserService;
 	
 	
 	@PostMapping("/addPublication")
 	@ResponseBody
 	public Publication addPublication(@RequestBody Publication publication) {
+		User u = IUserService.findUser(publication.getIdUser());
+		publication.setUser(u);
 		logger.info("---- add publication Method ---");
 		iPublicationService.addPublication(publication);
 		return publication;
@@ -96,10 +102,28 @@ public class RestControllerPublication {
     @GetMapping(value = "getNombrePublication")
     @ResponseBody
 	public int getNombrePublication() {
-		
-		return iPublicationService.getNombrePublicationJPQL();
+	return iPublicationService.getNombrePublicationJPQL();
+	}
+    
+	@GetMapping("/findValidatedPublications")
+	public List <Publication> findValidatedPublications() {
+		return iPublicationService.getValidatedPublications();
 	}
 	
+	@GetMapping("/findNotValidatedPublications")
+	public List <Publication> findNotValidatedPublications() {
+		return iPublicationService.getNotValidatedPublications();
+	}
 	
+    @GetMapping(value = "getnbValidated")
+    @ResponseBody
+	public List getnbValidated() {
+	return iPublicationService.getnbValidated();
+	}
+    
+	@GetMapping(value = "/statpublications")
+	public List statpublications() {
+		return iPublicationService.statPublications();
+	}
 	
 }

@@ -1,11 +1,13 @@
 package tn.esprit.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tn.esprit.entities.Comment;
+import tn.esprit.entities.DataPoint;
 import tn.esprit.entities.Publication;
 import tn.esprit.entities.User;
 import tn.esprit.repository.PublicationRepository;
@@ -20,6 +22,8 @@ public class IPublicationServiceImpl implements IPublicationService {
 	PublicationRepository publicationRepository;
 
 
+
+
 	@Override
 	public int addPublication(Publication publication) {
 		publicationRepository.save(publication);
@@ -31,18 +35,6 @@ public class IPublicationServiceImpl implements IPublicationService {
 		Publication publication = publicationRepository.findById(idPublication).orElse(null);
 		publicationRepository.delete(publication);
 		return publication;
-	}
-
-	@Override
-	public int updatePublication(Publication publication) {
-		Publication oldpublication = publicationRepository.findById(publication.getId()).orElse(null);
-		oldpublication.setContent(publication.getContent());
-		oldpublication.setNbDisLike(publication.getNbDisLike());
-		oldpublication.setNbLike(publication.getNbLike());
-		oldpublication.setPublicationDate(publication.getPublicationDate());
-		oldpublication.setUser(publication.getUser());
-		publicationRepository.save(oldpublication);
-		return 0;
 	}
 
 	@Override
@@ -98,6 +90,45 @@ public class IPublicationServiceImpl implements IPublicationService {
 	
 	public int getNombrePublicationJPQL() {
 		return publicationRepository.countpublications();
+	}
+
+	@Override
+	public List<Publication> getValidatedPublications() {
+		return publicationRepository.getValidatedPublications();
+	}
+
+	@Override
+	public List<Publication> getNotValidatedPublications() {
+		return publicationRepository.getNotValidatedPublications();
+	}
+	
+	
+	public List getnbValidated() {
+		return publicationRepository.getnbValidated();
+	}
+	@Override
+	public List<DataPoint> statPublications() {
+		List<DataPoint> list = new ArrayList<DataPoint>() ;
+		for (Object object : publicationRepository.statPublications()) {
+			DataPoint dataPoint = new DataPoint();     
+			dataPoint.setLabel((((Object[]) object)[0]).toString());
+			dataPoint.setY(Float.valueOf((((Object[]) object)[1]).toString()));
+			list.add(dataPoint);
+		}
+
+		return list;
+	}
+	
+	@Override
+	public int updatePublication(Publication publication) {
+		Publication oldpublication = publicationRepository.findById(publication.getId()).orElse(null);
+		oldpublication.setContent(publication.getContent());
+		oldpublication.setNbDisLike(publication.getNbDisLike());
+		oldpublication.setNbLike(publication.getNbLike());
+		oldpublication.setPublicationDate(publication.getPublicationDate());
+		oldpublication.setUser(publication.getUser());
+		publicationRepository.save(oldpublication);
+		return 0;
 	}
 	
 }

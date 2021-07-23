@@ -60,4 +60,40 @@ public class RestReclamationController {
 		return reclamationServices.findAllReclamation();
 	}
 
+	@GetMapping(value = "/getNumberReclamation")
+	@ResponseBody
+	public int getNumberReclamation() {
+		return reclamationServices.getNumberReclamation();
+	}
+	
+	@GetMapping(value = "/getStatusReclamtionWithDate")
+	@ResponseBody
+	public List<Object> getStatusReclamtionByDate() {
+		return reclamationServices.getStatusReclamtionByDate();
+	}
+	
+	@GetMapping(value = "/findByStatusInProgress")
+	@ResponseBody
+	public List<Reclamation> findByStatusInProgress() {
+		return reclamationServices.findByStatusStartsWith("IN");
+	}
+	
+	@GetMapping(value = "/findByStatusDone")
+	@ResponseBody
+	public List<Reclamation> findByStatusDone() {
+		return reclamationServices.findByStatusStartsWith("DONE");
+	}
+	
+	@GetMapping(value = "/findByGivenMessage/{message}")
+	@ResponseBody
+	public List<Reclamation> findByGivenMessage(@PathVariable("message") String message ) {
+		return reclamationServices.searchByMessageLike(message);
+	}
+	
+	@PostMapping(value = "/updateStatus/{id}/{message}")
+	@ResponseBody
+	public int updateJustStatusById(@PathVariable("id") int id ,@PathVariable("message") String message ) {
+		 return reclamationServices.updateJustStatusById(id,message);
+	}
+	
 }

@@ -54,4 +54,9 @@ public class WishListServiceImp implements IWishlistService  {
 		return (List<Whishlist>)wishlistRepository.findAll();
 	}
 
+	public int getNumberWishList() {
+		// TODO Auto-generated method stub
+		return wishlistRepository.getNumberWishlist();
+	}
+	
 }
