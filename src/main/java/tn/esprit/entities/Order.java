@@ -37,9 +37,9 @@ public class Order implements Serializable {
 	private DeliveryMan deliveryMan;
 	
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@NotFound(action = NotFoundAction.IGNORE)
+	//@JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER)
+	//@NotFound(action = NotFoundAction.IGNORE)
 	private User user;
 
 	public Order(int id, String reference, Date orderDate, String status, String typePaiement, String adresse,

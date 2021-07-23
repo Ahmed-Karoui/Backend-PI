@@ -20,6 +20,7 @@ import tn.esprit.entities.AffectationDto;
 import tn.esprit.entities.DeliveryMan;
 import tn.esprit.entities.DeliveryManStat;
 import tn.esprit.entities.Order;
+import tn.esprit.entities.OrderStatus;
 import tn.esprit.entities.PropositionDto;
 import tn.esprit.entities.User;
 import tn.esprit.repository.DeliveryManRepository;
@@ -89,15 +90,53 @@ public class DeliveryManServiceImpl implements IDeliveryManService,DeliveryRepos
 	@Override
 	public String affectOrdersToDeliveryMan(AffectationDto aff) {
 		
-		  List<Order> o = aff.getOrders();
-		  int idDM = aff.getIdDeliveryMan();
-		  
-		  DeliveryMan d = deliveryManRepository.findById(idDM).get();
-		  
-		  o.stream().forEach(x->{x.setDeliveryMan(d);
-			orderRepository.save(x);
-			});
-		  
+		//sup
+		 List<Order> orders = getListOrdersByDeliveryManId(aff.getIdDeliveryMan());
+		 
+		 if(orders!=null && orders.size()>0) {
+			 for ( int i =0 ; i<orders.size();i++){
+				 Order o = orders.get(i);
+				  o.setStatus("NEW");
+				  o.setDeliveryMan(null);
+				  orderRepository.save(o);
+				  
+			 }
+			 
+		 }
+		 
+		
+		
+		if(aff.getOrders()!=null && aff.getOrders().size()>0) {
+			  int idDM = aff.getIdDeliveryMan();
+			  
+			  DeliveryMan d = deliveryManRepository.findById(idDM).get();
+			  List<Order> o = aff.getOrders();
+			  o.stream().forEach(x->{
+				  x.setDeliveryMan(d);
+				  x.setStatus("PENDING");
+				orderRepository.save(x);
+				});
+			
+		}
+		 
+		 	 
+		return "affectation effectué avec succées";
+		
+
+	}
+	
+	@Override
+	public String affectOrdersToDeliveryManFront(int idD,int idC) {
+		
+	   Order o = orderRepository.findById(idC).get();
+	   
+	   DeliveryMan d = deliveryManRepository.findById(idD).get();
+	      
+	   o.setDeliveryMan(d);
+	   o.setStatus("PENDING");
+	   orderRepository.save(o);
+		 
+	
 		 
 		return "affectation effectué avec succées";
 		
@@ -160,16 +199,18 @@ public class DeliveryManServiceImpl implements IDeliveryManService,DeliveryRepos
 	}
 
 	@Override
-	public String setOrderDelivered_Criteria(int idDeliveryMan,int idOrder) {
+	public Order setOrderDelivered_Criteria(int idDeliveryMan,int idOrder) {
 		Order myOrder = getOrderByDeliveryManId(idDeliveryMan,idOrder);
+		 
+		if(myOrder!=null) {
+			myOrder.setStatus("DELIVERED");		
+			orderRepository.save(myOrder);
+			
+			
+			
+		}
 		
-		myOrder.setStatus("DELIVERED");
-	
-		
-		orderRepository.save(myOrder);
-		
-		
-		return "commande livrée avec succées !";
+		return myOrder;
 	}
 	
 	
@@ -212,24 +253,25 @@ public class DeliveryManServiceImpl implements IDeliveryManService,DeliveryRepos
 	}
 
 	@Override
-	public PropositionDto optimisationAlgo(int codePostalOrder) {
+	public List<DeliveryMan> optimisationAlgo(int codePostalOrder) {
 		PropositionDto proposition = new PropositionDto();
 		List<DeliveryMan> listDeliveryMan = getListDeliveryManByCodePostal(codePostalOrder);
-		if(listDeliveryMan!=null) {
-			
-			proposition.setCodePostal("livraison de la code Postal N° "+codePostalOrder+" pourrait être livré par " + 
-					" :  ");
-			
-            proposition.setListDeliveryMan(listDeliveryMan);
-            
-            return proposition;
-			
-			
-		}else {
-			proposition.setCodePostal("aucun livreur pourrait livrer cette livraison");
-			  proposition.setListDeliveryMan(null);
-			  return proposition;
-		}
+//		if(listDeliveryMan!=null) {
+//			
+//			proposition.setCodePostal("livraison de la code Postal N° "+codePostalOrder+" pourrait être livré par " + 
+//					" :  ");
+//			
+//            proposition.setListDeliveryMan(listDeliveryMan);
+//            
+//            return proposition;
+//			
+//			
+//		}else {
+//			proposition.setCodePostal("aucun livreur pourrait livrer cette livraison");
+//			  proposition.setListDeliveryMan(null);
+//			  return proposition;
+//		}
+		return listDeliveryMan;
 		
 		
 	}
@@ -254,6 +296,19 @@ public class DeliveryManServiceImpl implements IDeliveryManService,DeliveryRepos
 		}
 		 
 		 return null;
+	}
+
+	@Override
+	public Order supprimerAffectation(int idOrder) {
+		 Order o = orderRepository.findById(idOrder).get();
+		   
+		 
+		   o.setDeliveryMan(null);
+		   o.setStatus("NEW");
+		   orderRepository.save(o);
+		   
+		   return o;
+			 
 	}
 
 

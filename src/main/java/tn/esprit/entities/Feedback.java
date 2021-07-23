@@ -20,8 +20,9 @@ public class Feedback implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private float rate;
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
+	//@JsonFormat(pattern="dd-MM-yyyy")
 	private Date dateRating;
+	private transient int idProduct ;
 	@ManyToOne
 	private Product product;
 
@@ -67,6 +68,14 @@ public class Feedback implements Serializable {
 
 	public void setDateRating(Date dateRating) {
 		this.dateRating = dateRating;
+	}
+
+	public int getIdProduct() {
+		return idProduct;
+	}
+
+	public void setIdProduct(int idProduct) {
+		this.idProduct = idProduct;
 	}
 
 }

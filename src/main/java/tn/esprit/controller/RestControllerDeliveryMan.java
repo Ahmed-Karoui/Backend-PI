@@ -84,8 +84,8 @@ public class RestControllerDeliveryMan {
 		return iDeliveryManService.affectOrdersToDeliveryMan(aff);
 	}
 	
-	@GetMapping(value = "/setOrderDelivered___Criteria/{idDeliveryMan}/{idOrder}")
-	public String setOrderDelivered(@PathVariable int idDeliveryMan,@PathVariable int idOrder) {	
+	@GetMapping(value = "/setOrderDelivered/{idDeliveryMan}/{idOrder}")
+	public Order setOrderDelivered(@PathVariable int idDeliveryMan,@PathVariable int idOrder) {	
 		return iDeliveryManService.setOrderDelivered_Criteria(idDeliveryMan, idOrder);
 	}
 	
@@ -101,8 +101,19 @@ public class RestControllerDeliveryMan {
 	}
 	
 	@GetMapping(value = "/optimisationAlgo/{codePostalOrder}")
-	public PropositionDto optimisationAlgo(@PathVariable int codePostalOrder) {	
+	public List<DeliveryMan> optimisationAlgo(@PathVariable int codePostalOrder) {	
 		return iDeliveryManService.optimisationAlgo(codePostalOrder);
+	}
+	
+	@GetMapping(value = "/affectOrdersToDeliveryMan/{idDeliveryMan}/{idCommande}")
+	public String affectOrdersToDeliveryMan( @PathVariable int idDeliveryMan,@PathVariable int idCommande) {	
+		return   iDeliveryManService.affectOrdersToDeliveryManFront(idDeliveryMan,idCommande);
+	}
+	
+	
+	@GetMapping(value = "/supprimerAffectation/{idOrder}")
+	public Order supprimerAffectation(@PathVariable int idOrder) {	
+		return iDeliveryManService.supprimerAffectation(idOrder);
 	}
 	
 	

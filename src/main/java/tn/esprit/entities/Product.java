@@ -19,6 +19,7 @@ public class Product implements Serializable {
 	private int id;
 	private String title;
 	private Date publicationDate;
+	private float price;
 
 	@ManyToOne
 	private Category category;
@@ -65,6 +66,14 @@ public class Product implements Serializable {
 
 	public void setPublicationDate(Date publicationDate) {
 		this.publicationDate = publicationDate;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
 	}
 
 }

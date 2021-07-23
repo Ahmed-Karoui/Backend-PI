@@ -11,4 +11,5 @@ public interface DeliveryRepositoryCriteria {
 	 
 	 List<Order> getListOrdersByDeliveryManId(int id);
 
+
 }
