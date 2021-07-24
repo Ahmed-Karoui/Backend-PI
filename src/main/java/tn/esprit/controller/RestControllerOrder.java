@@ -155,7 +155,7 @@ public class RestControllerOrder {
         sos.flush();
         sos.close();
         
-        this.emailService.sendSimpleMessage("skander1673@gmail.com", "PDF", "votre doc est généré");
+        this.emailService.sendMailWithReport("skander1673@gmail.com", "Facture de la commande " + orderDetails.get(0).getOrder().getReference(), "Bonjour,</br> ci-joint la facture </br> Cordialement;",fileName);
         
         } catch (Exception exception) {
         		exception.printStackTrace();

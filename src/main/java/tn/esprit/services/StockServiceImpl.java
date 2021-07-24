@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tn.esprit.entities.DataPoint;
 import tn.esprit.entities.OrderDetails;
 import tn.esprit.entities.Product;
 import tn.esprit.entities.Stock;
@@ -26,9 +27,14 @@ public class StockServiceImpl implements IStockService {
 	UserRepository UserRepository;
 	@Autowired
 	OrderDetailsRepository orderDetailsRepository;
+	@Autowired
+	ProductRepository productRepository;
 	
 	@Override
 	public int addStock(Stock stock) {
+		Product product = new Product();
+		product = productRepository.findById(stock.getProduct().getId()).orElse(null);
+		stock.setProduct(product);
 		stockRepository.save(stock);
 		return stock.getId();
 	}
@@ -109,8 +115,18 @@ public class StockServiceImpl implements IStockService {
 	}
 
 	@Override
-	public List productsOrderByQte() {
-		return stockRepository.getProductOrderByStock();
+	public List<DataPoint> productsOrderByQte() {
+		
+		List<DataPoint> list = new ArrayList<DataPoint>();
+		for (Object object : stockRepository.getProductOrderByStock()) {
+			DataPoint dataPoint = new DataPoint();
+			dataPoint.setLabel((((Object[]) object)[0]).toString());
+			dataPoint.setY(Float.valueOf((((Object[]) object)[1]).toString()));
+			list.add(dataPoint);
+		}
+
+		return list;
+
 	}
 
 	@Override
