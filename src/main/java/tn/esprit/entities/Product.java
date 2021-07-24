@@ -21,10 +21,8 @@ public class Product implements Serializable {
 	private int id;
 	private String title;
 	private Float price;
-	@Lob
 	private String description;
 	private Date publicationDate;
-	private float price;
 
 	@ManyToOne
 	private Category category;

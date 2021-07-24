@@ -2,6 +2,7 @@ package tn.esprit.services;
 
 import java.util.List;
 
+import tn.esprit.entities.DataPoint;
 import tn.esprit.entities.Product;
 
 public interface IProductService {
@@ -22,6 +23,8 @@ public interface IProductService {
 	public List<Product> getProductByTitle(String title);
 	
 	public List<Product> getProductsByCategory(int id );
+	
+	public List<DataPoint> statNombreProductByCategory();
 	
 	
 
