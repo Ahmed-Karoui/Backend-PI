@@ -27,9 +27,14 @@ public class StockServiceImpl implements IStockService {
 	UserRepository UserRepository;
 	@Autowired
 	OrderDetailsRepository orderDetailsRepository;
+	@Autowired
+	ProductRepository productRepository;
 	
 	@Override
 	public int addStock(Stock stock) {
+		Product product = new Product();
+		product = productRepository.findById(stock.getProduct().getId()).orElse(null);
+		stock.setProduct(product);
 		stockRepository.save(stock);
 		return stock.getId();
 	}
