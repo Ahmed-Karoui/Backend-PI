@@ -20,7 +20,6 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String title;
-	private Float price;
 	@Lob
 	private String description;
 	private Date publicationDate;

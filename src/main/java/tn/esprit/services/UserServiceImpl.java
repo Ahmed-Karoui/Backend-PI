@@ -77,12 +77,18 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public int updateUser(User user) {
 		User oldUser = userRepository.findById(user.getId()).orElse(null);
-		oldUser.setFirstName(user.getFirstName());
-		oldUser.setLastName(user.getLastName());
-		oldUser.setEmail(user.getEmail());
-		oldUser.setUsername(user.getUsername());
-		// oldUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-		oldUser.setUserRole(user.getUserRole());
+		if (user.getFirstName() != null)
+			oldUser.setFirstName(user.getFirstName());
+		if (user.getLastName() != null)
+			oldUser.setLastName(user.getLastName());
+		if (user.getEmail() != null)
+			oldUser.setEmail(user.getEmail());
+		if (user.getUsername() != null)
+			oldUser.setUsername(user.getUsername());
+		if (user.getPassword() != null)
+			oldUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		if (user.getUserRole() != null)
+			oldUser.setUserRole(user.getUserRole());
 		userRepository.save(oldUser);
 		return 0;
 	}
