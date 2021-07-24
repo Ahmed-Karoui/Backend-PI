@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.itextpdf.text.Document;
 
+import tn.esprit.dto.CountGroupByOrderStatus;
 import tn.esprit.dto.CountOrderByUser;
 import tn.esprit.entities.Order;
 import tn.esprit.entities.OrderDetails;
@@ -124,6 +125,11 @@ public class RestControllerOrder {
 	@GetMapping("/findOrderNumberForUser")
 	public List<CountOrderByUser> findOrderByUser() {
 		return this.orderService.findNumberOrderForUser();
+	}
+	
+	@GetMapping("/findGroupByStatus")
+	public List<CountGroupByOrderStatus> findGroupByStatus() {
+		return this.orderService.findStatusGroupByNumber();
 	}
 	
 	public List<OrderDetails> getOrderDetails(List<OrderDetails> ordDetails){
