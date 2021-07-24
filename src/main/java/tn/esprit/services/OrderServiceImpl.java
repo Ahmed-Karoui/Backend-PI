@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import tn.esprit.dto.CountOrderByUser;
 import tn.esprit.entities.Order;
+import tn.esprit.entities.OrderDetails;
+import tn.esprit.repository.OrderDetailsRepository;
 import tn.esprit.repository.OrderRepository;
 
 @Service
@@ -22,6 +24,9 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@PersistenceContext
     private EntityManager em;
+	
+	@Autowired
+	private OrderDetailsRepository orderDetailsService ;
 
 	@Override
 	public int addOrder(Order order) {
@@ -32,6 +37,8 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public Order deleteOrder(int idOrder) {
 		Order order = this.orderRepository.findById(idOrder).orElse(null);
+		List<OrderDetails> listOrderFetals = this.orderDetailsService.findOrderDetailsByOrderId(idOrder);
+		this.orderDetailsService.deleteAll(listOrderFetals);
 		this.orderRepository.delete(order);
 		return order;
 	}
