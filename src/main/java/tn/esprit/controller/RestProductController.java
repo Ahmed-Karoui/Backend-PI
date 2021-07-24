@@ -71,6 +71,11 @@ public class RestProductController {
 		return productServices.getNombreProductByCategory();
 	}
 	
+	@GetMapping(value = "/nombreProductByCategoryList")
+	public List statNombreProductByCategory() {
+		return productServices.statNombreProductByCategory();
+	}
+	
 	@GetMapping(value = "/getProductByTitle/{title}")
 	@ResponseBody
 	public List<Product> getProductByTitle(@PathVariable("title") String title) {
@@ -82,6 +87,8 @@ public class RestProductController {
 	public List<Product> getProductsByCategory(@PathVariable("id") int id) {
 		return productServices.getProductsByCategory(id);
 	}
+	
+	
 	
 
 }

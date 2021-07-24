@@ -23,7 +23,6 @@ public class Product implements Serializable {
 	private Float price;
 	private String description;
 	private Date publicationDate;
-	private float price;
 
 	@ManyToOne
 	private Category category;
